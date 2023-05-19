@@ -55,4 +55,33 @@ public static class GameLogic
         throw new NotImplementedException();
     }
 
+    public static bool PlayerStillActive(object opponent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static int GetShotCount(PlayerInfoModel winner)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static (string row, int column) SplitShotIntoRowAndColumn(string shot)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static bool ValidateShot(PlayerInfoModel activePlayer, string row, int column)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static bool IdentifyShotResult(PlayerInfoModel opponent, string row, int column)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static void MarkShotResult(PlayerInfoModel activePlayer, string row, int column, bool isAHit)
+    {
+        throw new NotImplementedException();
+    }
 }

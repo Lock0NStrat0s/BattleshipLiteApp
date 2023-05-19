@@ -25,33 +25,67 @@ do
     if (doesGameContinue)
     {
         // Swap using a temp variable
-        PlayerInfoModel tempHolder = opponent;
-        opponent = activePlayer;
-        activePlayer = tempHolder;
+
+        //PlayerInfoModel tempHolder = opponent;
+        //opponent = activePlayer;
+        //activePlayer = tempHolder;
+
+        // Tuple method
+        (activePlayer, opponent) = (opponent, activePlayer);
     }
     else
     {
         winner = activePlayer;
     }
+
+    IdentifyWinner(winner);
+
     // Clear display
+
+
 } while (winner == null);
+
+void IdentifyWinner(PlayerInfoModel winner)
+{
+    Console.WriteLine($"Congratulations to {winner.UsersName} for winning.");
+    Console.WriteLine($"{winner.UsersName} took {GameLogic.GetShotCount(winner)}");
+}
 
 static void RecordPlayerShot(PlayerInfoModel activePlayer, PlayerInfoModel opponent)
 {
-    // Asks for a shot (we ask for "B2" not "B" and then "2")
-    // Determine what row and column that is (split it apart)
-    // Determine if that was a valid shot
-    // Go back to the beginning if not a valid shot
-
-    // Determine shot results
-    // Record results
-
     bool isValidShot = false;
+    string row = "";
+    int column = 0;
 
     do
     {
-        
+        // Asks for a shot (we ask for "B2" not "B" and then "2")
+        string shot = AskForShot();
+        // Determine what row and column that is (split it apart)
+        (row, column) = GameLogic.SplitShotIntoRowAndColumn(shot);
+        // Determine if that was a valid shot
+        isValidShot = GameLogic.ValidateShot(activePlayer, row, column);
+
+        // Go back to the beginning if not a valid shot
+        if (!isValidShot)
+        {
+            Console.WriteLine("Invalid shot location. Please try again!");
+        }
     } while (!isValidShot);
+
+    // Determine shot results
+    bool isAHit = GameLogic.IdentifyShotResult(opponent, row, column);
+
+    // Record results
+    GameLogic.MarkShotResult(activePlayer, row, column, isAHit);
+}
+
+static string AskForShot()
+{
+    Console.Write("Please enter your shot selection: ");
+    string output = Console.ReadLine();
+
+    return output;
 }
 
 static void DisplayShotGrid(PlayerInfoModel activePlayer)
