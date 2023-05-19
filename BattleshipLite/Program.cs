@@ -24,13 +24,12 @@ do
     // else, swap positions (activePlayer to opponent)
     if (doesGameContinue)
     {
-        // Swap using a temp variable
-
+        // Swap using a temp variable - OLD METHOD
         //PlayerInfoModel tempHolder = opponent;
         //opponent = activePlayer;
         //activePlayer = tempHolder;
 
-        // Tuple method
+        // Tuple method - simply swap positions without a temp variable
         (activePlayer, opponent) = (opponent, activePlayer);
     }
     else
@@ -41,11 +40,11 @@ do
     IdentifyWinner(winner);
 
     // Clear display
-
+    Console.Clear();
 
 } while (winner == null);
 
-void IdentifyWinner(PlayerInfoModel winner)
+static void IdentifyWinner(PlayerInfoModel winner)
 {
     Console.WriteLine($"Congratulations to {winner.UsersName} for winning.");
     Console.WriteLine($"{winner.UsersName} took {GameLogic.GetShotCount(winner)}");
