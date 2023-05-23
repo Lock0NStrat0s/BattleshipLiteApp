@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace BattleshipLiteLibrary;
 
+//
 public static class GameLogic
 {
     public static void InitializeGrid(PlayerInfoModel model)
