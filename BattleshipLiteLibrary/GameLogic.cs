@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace BattleshipLiteLibrary;
 
-//
 public static class GameLogic
 {
     public static void InitializeGrid(PlayerInfoModel model)
@@ -160,9 +159,13 @@ public static class GameLogic
 
         foreach (GridSpotModel gridSpot in activePlayer.ShipLocations)
         {
-            if (gridSpot.Status == GridSpotStatus.Empty)
+            if (gridSpot.Status == GridSpotStatus.Empty || gridSpot.Status == GridSpotStatus.Ship)
             {
                 isValidLocation = true;
+            }
+            else
+            {
+                Console.WriteLine("da fack");
             }
         }
 

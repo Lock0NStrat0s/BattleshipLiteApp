@@ -4,13 +4,15 @@ using BattleshipLiteLibrary.Models;
 WelcomeMessage();
 
 PlayerInfoModel activePlayer = CreatePlayer("Player 1");
-PlayerInfoModel opponent = CreatePlayer("Player 1");
+PlayerInfoModel opponent = CreatePlayer("Player 2");
 PlayerInfoModel winner = null;
 
 do
 {
     // Display grid from activePlayer on where they fired
     DisplayShotGrid(activePlayer);
+    Console.WriteLine();
+    Console.WriteLine();
 
     // Ask activePlayer for a shot
     // Determine if it is a valid shot
@@ -35,9 +37,8 @@ do
     else
     {
         winner = activePlayer;
+        IdentifyWinner(winner);
     }
-
-    IdentifyWinner(winner);
 
     // Clear display
     Console.Clear();
@@ -62,6 +63,7 @@ static void RecordPlayerShot(PlayerInfoModel activePlayer, PlayerInfoModel oppon
         string shot = AskForShot();
         // Determine what row and column that is (split it apart)
         (row, column) = GameLogic.SplitShotIntoRowAndColumn(shot);
+
         // Determine if that was a valid shot
         isValidShot = GameLogic.ValidateShot(activePlayer, row, column);
 
