@@ -11,8 +11,7 @@ do
 {
     // Display grid from activePlayer on where they fired
     DisplayShotGrid(activePlayer);
-    Console.WriteLine();
-    Console.WriteLine();
+    Console.WriteLine("\n");
 
     // Ask activePlayer for a shot
     // Determine if it is a valid shot
@@ -40,9 +39,6 @@ do
         IdentifyWinner(winner);
     }
 
-    // Clear display
-    Console.Clear();
-
 } while (winner == null);
 
 static void IdentifyWinner(PlayerInfoModel winner)
@@ -61,11 +57,20 @@ static void RecordPlayerShot(PlayerInfoModel activePlayer, PlayerInfoModel oppon
     {
         // Asks for a shot (we ask for "B2" not "B" and then "2")
         string shot = AskForShot();
-        // Determine what row and column that is (split it apart)
-        (row, column) = GameLogic.SplitShotIntoRowAndColumn(shot);
 
-        // Determine if that was a valid shot
-        isValidShot = GameLogic.ValidateShot(activePlayer, row, column);
+        try
+        {
+            // Determine what row and column that is (split it apart)
+            (row, column) = GameLogic.SplitShotIntoRowAndColumn(shot);
+
+            // Determine if that was a valid shot
+            isValidShot = GameLogic.ValidateShot(activePlayer, row, column);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            isValidShot = false;
+        }
 
         // Go back to the beginning if not a valid shot
         if (!isValidShot)
@@ -79,6 +84,20 @@ static void RecordPlayerShot(PlayerInfoModel activePlayer, PlayerInfoModel oppon
 
     // Record results
     GameLogic.MarkShotResult(activePlayer, row, column, isAHit);
+
+    DisplayShotResults(row, column, isAHit);
+}
+
+static void DisplayShotResults(string row, int column, bool isAHit)
+{
+    if (isAHit)
+    {
+        Console.WriteLine($"\n{row}{column} is a hit!\n");
+    }
+    else
+    {
+        Console.WriteLine($"\n{row}{column} is a miss!\n");
+    }
 }
 
 static string AskForShot()
@@ -92,6 +111,9 @@ static string AskForShot()
 static void DisplayShotGrid(PlayerInfoModel activePlayer)
 {
     string currentRow = activePlayer.ShotGrid[0].SpotLetter;
+
+    Console.WriteLine($"{activePlayer.UsersName}'s turn!");
+
     foreach (var gridSpot in activePlayer.ShotGrid)
     {
         if (gridSpot.SpotLetter != currentRow)
@@ -105,15 +127,15 @@ static void DisplayShotGrid(PlayerInfoModel activePlayer)
         }
         else if (gridSpot.Status == GridSpotStatus.Hit)
         {
-            Console.Write(" X ");
+            Console.Write(" XX ");
         }
         else if (gridSpot.Status == GridSpotStatus.Miss)
         {
-            Console.Write(" O ");
+            Console.Write(" OO ");
         }
         else
         {
-            Console.Write(" ? ");
+            Console.Write(" ?? ");
         }
     }
 }
@@ -159,7 +181,16 @@ static void PlaceShips(PlayerInfoModel model)
         Console.Write($"Where do you want to place ship #{model.ShipLocations.Count + 1}: ");
         string location = Console.ReadLine();
 
-        bool IsValidLocation = GameLogic.PlaceShip(model, location);
+        bool IsValidLocation = false;
+
+        try
+        {
+            IsValidLocation = GameLogic.PlaceShip(model, location);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+        }
 
         if (!IsValidLocation)
         {

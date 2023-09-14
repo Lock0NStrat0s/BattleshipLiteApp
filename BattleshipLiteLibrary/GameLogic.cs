@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -157,15 +158,14 @@ public static class GameLogic
     {
         bool isValidLocation = false;
 
-        foreach (GridSpotModel gridSpot in activePlayer.ShipLocations)
+        foreach (GridSpotModel gridSpot in activePlayer.ShotGrid)
         {
-            if (gridSpot.Status == GridSpotStatus.Empty || gridSpot.Status == GridSpotStatus.Ship)
+            if (gridSpot.SpotLetter == row.ToUpper() && gridSpot.SpotNumber == column)
             {
-                isValidLocation = true;
-            }
-            else
-            {
-                Console.WriteLine("da fack");
+                if (gridSpot.Status == GridSpotStatus.Empty)
+                {
+                    isValidLocation = true;
+                }
             }
         }
 
@@ -176,13 +176,14 @@ public static class GameLogic
     {
         bool isAHit = false;
 
-        foreach (GridSpotModel gridSpot in opponent.ShipLocations)
+        foreach (GridSpotModel ship in opponent.ShipLocations)
         {
-            if (gridSpot.Status == GridSpotStatus.Ship)
+            if (ship.Status == GridSpotStatus.Ship)
             {
-                if (gridSpot.SpotLetter == row.ToUpper() && gridSpot.SpotNumber == column)
+                if (ship.SpotLetter == row.ToUpper() && ship.SpotNumber == column)
                 {
                     isAHit = true;
+                    ship.Status = GridSpotStatus.Sunk;
                 }
             }
         }
@@ -194,18 +195,18 @@ public static class GameLogic
     {
         bool isValidShot = false;
 
-        foreach (GridSpotModel gridSpot in player.ShotGrid)
+        foreach (GridSpotModel ship in player.ShotGrid)
         {
 
-            if (gridSpot.SpotLetter == row.ToUpper() && gridSpot.SpotNumber == column)
+            if (ship.SpotLetter == row.ToUpper() && ship.SpotNumber == column)
             {
                 if (isAHit)
                 {
-                    gridSpot.Status = GridSpotStatus.Hit;
+                    ship.Status = GridSpotStatus.Hit;
                 }
                 else
                 {
-                    gridSpot.Status = GridSpotStatus.Miss;
+                    ship.Status = GridSpotStatus.Miss;
                 }
             }
         }
